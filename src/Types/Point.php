@@ -5,8 +5,7 @@ namespace Grimzy\LaravelMysqlSpatial\Types;
 use GeoJson\GeoJson;
 use GeoJson\Geometry\Point as GeoJsonPoint;
 use Grimzy\LaravelMysqlSpatial\Exceptions\InvalidGeoJsonException;
-
-class Point extends Geometry
+class Point extends Geometry implements \JsonSerializable
 {
     protected $lat;
 
@@ -92,8 +91,14 @@ class Point extends Geometry
      *
      * @return \GeoJson\Geometry\Point
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
-        return new GeoJsonPoint([$this->getLng(), $this->getLat()]);
+        return [
+            'type' => 'Point',
+            'coordinates' => [
+                $this->getLng(),
+                $this->getLat()
+            ]
+        ];
     }
 }
